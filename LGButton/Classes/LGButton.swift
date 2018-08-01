@@ -59,6 +59,18 @@ public class LGButton: UIControl {
     
     // MARK: - Inspectable properties
     // MARK:
+
+    @IBInspectable public var opacityShouldChangeWhenDisabled: Bool = false {
+        didSet {
+            setupView()
+        }
+    }
+
+    @IBInspectable public var opacityWhenDisabled: CGFloat = 0.5 {
+        didSet {
+            setupView()
+        }
+    }
     
     @IBInspectable public var bgColor: UIColor = UIColor.gray {
         didSet{
@@ -360,6 +372,19 @@ public class LGButton: UIControl {
     override public var intrinsicContentSize: CGSize {
         return CGSize(width: 10, height: 10)
     }
+
+    override public var isUserInteractionEnabled: Bool {
+        get {
+            return super.isUserInteractionEnabled
+        }
+        set {
+            super.isUserInteractionEnabled = newValue
+            if !newValue {
+                pressed = false
+            }
+            setupView()
+        }
+    }
     
     // MARK: - Internal functions
     // MARK:
@@ -380,6 +405,7 @@ public class LGButton: UIControl {
         setupSpacings()
         setupShadow()
         setupLoadingView()
+        setUpOpacityForDisabledState()
     }
     
     fileprivate func setIconOrientation() {
@@ -574,6 +600,14 @@ public class LGButton: UIControl {
         mainStackView.isHidden = isLoading
         loadingStackView.isHidden = !isLoading
         isUserInteractionEnabled = !isLoading
+    }
+
+    fileprivate func setUpOpacityForDisabledState() {
+        if opacityShouldChangeWhenDisabled && !isUserInteractionEnabled {
+            alpha = opacityWhenDisabled
+        } else {
+            alpha = 1
+        }
     }
     
     // MARK: - Xib file
