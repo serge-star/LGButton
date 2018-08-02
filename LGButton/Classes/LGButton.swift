@@ -60,6 +60,15 @@ public class LGButton: UIControl {
     // MARK: - Inspectable properties
     // MARK:
 
+    @IBInspectable public var isControlEnabled: Bool {
+        get {
+            return isEnabled
+        }
+        set {
+            isEnabled = newValue
+        }
+    }
+
     @IBInspectable public var opacityShouldChangeWhenDisabled: Bool = false {
         didSet {
             setupView()
@@ -368,22 +377,15 @@ public class LGButton: UIControl {
         }
         setupBorderAndCorners()
     }
-    
-    override public var intrinsicContentSize: CGSize {
-        return CGSize(width: 10, height: 10)
-    }
 
-    override public var isUserInteractionEnabled: Bool {
-        get {
-            return super.isUserInteractionEnabled
-        }
-        set {
-            super.isUserInteractionEnabled = newValue
-            if !newValue {
-                pressed = false
-            }
+    override public var isEnabled: Bool {
+        didSet {
             setupView()
         }
+    }
+
+    override public var intrinsicContentSize: CGSize {
+        return CGSize(width: 10, height: 10)
     }
     
     // MARK: - Internal functions
@@ -603,7 +605,7 @@ public class LGButton: UIControl {
     }
 
     fileprivate func setUpOpacityForDisabledState() {
-        if opacityShouldChangeWhenDisabled && !isUserInteractionEnabled {
+        if opacityShouldChangeWhenDisabled && !isControlEnabled {
             alpha = opacityWhenDisabled
         } else {
             alpha = 1
