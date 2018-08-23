@@ -681,7 +681,7 @@ public class LGButton: UIControl {
     }
 
     func updateTouchAlpha() {
-        if self.alpha != self.touchAlpha.rawValue {
+        if self.rootView.alpha != self.touchAlpha.rawValue {
             UIView.animate(withDuration: 0.3) {
                 self.rootView.alpha = self.touchAlpha.rawValue
             }
